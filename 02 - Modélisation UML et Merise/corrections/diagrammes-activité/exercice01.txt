@@ -1,0 +1,42 @@
+@startuml
+
+skin rose
+
+title Distributeur de billets - Activity Diagram 
+
+
+start
+
+:introduire la carte;
+
+:vérifier la validaté de la carte;
+if (carte valide) then (valide)
+  :demander code;
+  repeat
+    :saisir code;
+      if (code correcte ?) then (correcte)
+        repeat
+        :demander un montant;
+        repeat while (montant < solde) is (solde insuffisant) not (suffisant)
+          fork
+            :rendre carte;
+          fork again;
+            :sortir billets;
+          fork again;
+            :donner reçu;
+          end fork
+          stop;
+      else (incorrecte)
+        :Message erreur;
+        :Incrémenter nombre tentative;
+      endif
+  repeat while (Tentative < 3) is (vrai) not (faux)
+  :Avaler la carte;
+  stop
+else (invalide)
+  :rendre carte;
+  
+  stop
+endif
+
+@enduml
