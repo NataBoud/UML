@@ -1,0 +1,34 @@
+@startuml
+
+skin rose
+
+title Dossier - Activity Diagram \n
+
+start
+
+:Etablir un dossier;
+:Soumettre le dossier;
+
+fork
+  :Prise de décision du siège;
+  if (validation de la décision) then ([Accord])
+  else ([Désaccord])
+    :Abandonner le projet;
+    :Contacter la banque;
+    stop
+  endif
+fork again 
+  :Prise de décision de la banque;
+end fork
+
+if (validation banque) then ([oui])
+  :Etablir le dossier final;
+  :Lancer le projet;
+else ([non])
+  :Réétudier le dossier;
+  end
+endif
+
+stop
+
+@enduml

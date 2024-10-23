@@ -1,0 +1,50 @@
+@startuml
+
+skin rose
+
+title "Transfert de fonds - Sequence Diagram"
+
+actor "Client banque" as Client
+participant "App mobile" as App 
+participant "Serveur bancaire" as Banque
+participant "Compte client" as Compte
+
+Client -> App : Demande de transfert de fonds
+activate Client
+
+App -->> Client: Code pin vérification
+activate App
+
+loop 3 fois
+  Client -> App : Saisie du Code
+  App ->> Banque : Validation code 
+  activate Banque
+  
+  alt code pin valide
+    break
+    Banque -->> App : validation du pin
+    end
+  else code pin invalide
+    Banque -->> App: code pin invalide
+    App -->> Client : Code pin invalide
+  end
+end
+
+Banque -> Banque : Vérifier les fonds
+
+alt solde valide 
+  Banque ->> Compte : Transfert du montant
+  activate Compte
+  Compte -->> Banque : validation Transfert
+  deactivate Compte
+  Banque -->> App : mise à jour du solde 
+  App -->> Client : Transfert réussi :)
+else solde invalide
+  Banque -->> App : notifie fond non disponible
+  deactivate Banque
+  App -->> Client : Montant saisie indisponible
+end
+deactivate App
+deactivate Client
+
+@enduml

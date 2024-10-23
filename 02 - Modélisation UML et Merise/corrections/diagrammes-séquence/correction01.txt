@@ -1,0 +1,58 @@
+@startuml
+
+skin rose
+
+title "Livraison Uber Eats - Sequence Diagram"
+
+actor Client
+participant App
+participant Restaurant
+actor Livreur
+
+
+Client -> App : Passer une commande
+activate Client
+activate App
+
+App ->> Restaurant : Transmission de la commande
+activate Restaurant
+
+alt Validation de la commande
+  Restaurant -->> App : Accepte la commande
+else Commande refusée
+  Restaurant -->> App : Refuse la commande
+  App -->> Client : Refus de la commande
+end
+
+App -->> Client : Commande validée !
+deactivate Client
+
+Restaurant -> Restaurant : Préparer la commande
+
+Restaurant -->> App : Commande prête
+
+App -->> Client: Le restaurant a préparé la commande !
+activate Client
+deactivate Client
+
+App ->> Livreur : Notifier pour récupération
+activate Livreur
+
+Livreur -->> Restaurant : Chercher la Commande
+
+Restaurant ->> Livreur : Donner la Commande
+deactivate Restaurant
+
+Livreur -->> Client : Livrer la Commande
+activate Client
+deactivate Livreur
+Client -> App : Confirmer la réception
+deactivate Client
+deactivate App
+
+
+
+
+
+
+@enduml
