@@ -1,0 +1,69 @@
+@startuml
+|serveur|
+
+skin rose
+
+title Restaurant - Activity Diagram \n
+
+start
+
+
+:Accueillir le client;
+:Installer le client à la table;
+:Apporter la carte;
+
+|client|
+repeat
+  :Choisir le plat;
+  if (client a choisi) then (oui)
+    |serveur|
+    :noter la commande;
+  else (non)
+    :attendre que le client choisisse;
+  endif
+|client|
+repeat while (le client hésite) is (oui)
+
+|serveur|
+:Transmettre la commande à la cuisine;
+
+fork
+  if (commande de boisson) then (oui)
+    :apporter les boissons;
+  endif
+fork again
+  :apporter les couverts et le pain;
+fork again
+  |cuisine|
+  :préparation du plat;
+end fork
+
+|serveur|
+:Apporter le plat;
+
+|client|
+if (Client satisfait du plat) then (miam)
+else (beurk)
+  |serveur|
+  :rapport le plat en cuisine;
+  |cuisine|
+  :plat récuit;
+  |serveur|
+  :apporter de nouveau au client;
+endif
+
+|client|
+:client mange;
+
+|serveur|
+:apporter addition;
+
+|client|
+:le client paye;
+
+|serveur|
+:débarasser la table;
+
+stop
+
+@enduml
